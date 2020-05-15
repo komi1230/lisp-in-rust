@@ -9,5 +9,7 @@ fn main() {
     println!("Before : {}", s);
 
     let ss = minilisp::parser::tokenize(s);
-    println!("After : {}", ss);
+    for i in ss{
+        println!("{}", i);
+    };
 }
