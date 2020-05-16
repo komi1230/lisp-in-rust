@@ -23,6 +23,11 @@ pub fn tokenize(s: &str) -> VecDeque<String> {
 }
 
 pub fn read_from(tokens: &mut VecDeque<String>) -> LatentExpression {
+    // List shouldn't be null
+    if tokens.len() == 0 {
+        panic!("Unexpected EOF while reading");
+    }
+
     let token = tokens.pop_front().unwrap();
 
     if token == "(" {
@@ -31,6 +36,11 @@ pub fn read_from(tokens: &mut VecDeque<String>) -> LatentExpression {
             list.push(read_from(tokens))
         }
         return LatentExpression::List(list);
+    }
+
+    // Invalid parenthesis
+    if token == ")" {
+        panic!("Unexpected parenthesis");
     }
 
     if let Ok(value_int) = token.parse::<i32>() {
