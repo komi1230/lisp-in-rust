@@ -13,13 +13,10 @@ enum LatentExpression {
 }
 
 
-pub fn tokenize(s: &str) -> Vec<String>{
+pub fn tokenize(s: &str) -> Vec<String> {
     let spreaded = s.replace("(", " ( ").replace(")", " ) ");
     
-    let tokens: Vec<String> = spreaded.split(" ").map(|item| item.to_string()).collect();
+    let tokens: Vec<String> = spreaded.trim().split(" ").map(|item| item.to_string()).collect();
 
     return tokens;
 }
-
-
-//pub fn read_from(tokens: Vec<String>) 
