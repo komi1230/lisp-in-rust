@@ -1,68 +1,41 @@
-enum LispData {
+use std::collections::VecDeque;
+
+#[derive(Debug)]
+pub enum LatentExpression {
     Int(i32),
     Float(f64),
     Text(String),
+    List(Vec<LatentExpression>),
 }
 
-
-enum LatentExpression {
-    Int(i32),
-    Float(f64),
-    Text(String),
-    List(Vec<LispData>)
-}
-
-
-pub fn tokenize(s: &str) -> Vec<String> {
-
+pub fn tokenize(s: &str) -> VecDeque<String> {
     // Spread each tokens
     let spreaded = s.replace("(", " ( ").replace(")", " ) ");
 
     // Split string to each tokens
-    let tokens: Vec<String> = spreaded.trim().split(" ").map(|item| item.to_string()).collect();
+    let tokens: VecDeque<String> = spreaded
+        .trim()
+        .split_whitespace()
+        .map(|item| item.to_string())
+        .collect();
 
-    return tokens;
+    tokens
 }
 
-
-pub fn atom(token: LispData) -> LispData {
-
-    // Integer
-    let value_int = token.parse::<i32>();
-    if let Ok(value_int) = value_int {
-        return value_int.unwrap();
-    }
-
-    // Float
-    let value_float = token.parse::<f64>();
-    if let Ok(value_float) = value_float {
-        return value_float.unwrap();
-    }
-
-    // String
-    return token;
-}
-
-
-pub fn read_from(tokens: Vec<String>) -> LatentExpression {
-
+pub fn read_from(tokens: &mut VecDeque<String>) -> LatentExpression {
     // List shouldn't be null
     if tokens.len() == 0 {
         panic!("Unexpected EOF while reading");
     }
 
-    // Get head symbol
-    let token: LispData = tokens.pop();
+    let token = tokens.pop_front().unwrap();
 
-    // Make recurrent list
     if token == "(" {
-        let L = Vec::new();
-        while tokens[0] != ")" {
-            L.push(read_from(tokens()));
+        let mut list = vec![];
+        while tokens.len() > 0 && tokens[0] != ")" {
+            list.push(read_from(tokens))
         }
-        let _ = tokens.pop();
-
-        return L;
+        return LatentExpression::List(list);
     }
 
     // Invalid parenthesis
@@ -70,5 +43,13 @@ pub fn read_from(tokens: Vec<String>) -> LatentExpression {
         panic!("Unexpected parenthesis");
     }
 
-    return atom(token);
+    if let Ok(value_int) = token.parse::<i32>() {
+        return LatentExpression::Int(value_int);
+    }
+
+    if let Ok(value_float) = token.parse::<f64>() {
+        return LatentExpression::Float(value_float);
+    }
+
+    LatentExpression::Text(token.to_string())
 }
