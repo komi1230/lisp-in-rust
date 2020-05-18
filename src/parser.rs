@@ -5,8 +5,23 @@ pub enum LatentExpression {
     Int(i32),
     Float(f64),
     Text(String),
-    List(Vec<LatentExpression>),
+    List(VecDeque<LatentExpression>),
 }
+
+
+impl LatentExpression {
+    pub fn as_vec(&mut self) -> &VecDeque<LatentExpression> {
+        match self {
+            LatentExpression::List(v) => v,
+            _ => panic!("Not List")
+        }
+    }
+
+    pub fn len(&mut self) -> usize {
+        self.as_vec().len()
+    }
+}
+
 
 pub fn tokenize(s: &str) -> VecDeque<String> {
     // Spread each tokens
@@ -22,6 +37,7 @@ pub fn tokenize(s: &str) -> VecDeque<String> {
     tokens
 }
 
+
 pub fn read_from(tokens: &mut VecDeque<String>) -> LatentExpression {
     // List shouldn't be null
     if tokens.len() == 0 {
@@ -31,9 +47,9 @@ pub fn read_from(tokens: &mut VecDeque<String>) -> LatentExpression {
     let token = tokens.pop_front().unwrap();
 
     if token == "(" {
-        let mut list = vec![];
+        let mut list = VecDeque::new();
         while tokens.len() > 0 && tokens[0] != ")" {
-            list.push(read_from(tokens))
+            list.push_back(read_from(tokens))
         }
         return LatentExpression::List(list);
     }

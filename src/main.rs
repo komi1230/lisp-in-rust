@@ -11,6 +11,7 @@ fn main() {
         println!("{}", i);
     }
 
-    let x = minilisp::parser::read_from(&mut ss);
+    let mut x = minilisp::parser::read_from(&mut ss);
+    println!("latent expression length: {:?}", x.len());
     println!("latent expression: {:?}", x);
 }
