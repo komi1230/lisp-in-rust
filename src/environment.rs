@@ -1,42 +1,45 @@
 use std::collections::VecDeque;
 
+fn include_float(tokens: &mut VecDeque<String>) -> bool {
+    for i in tokens {
+        if let Ok(tmp) = i.parse::<i32>() {
+            return false;
+        }
+    }
 
-fn add_float(tokens: &mut VecDeque<String>) -> i32 {
-    let token = tokens.pop_front().unwrap();
-    
-    if tokens.len() == 0 {
-        return 0;
-    }
-    
-    if let Ok(value_float) = token.parse::<f64>() {
-        return value_float + add_int(tokens)
-    } else {
-        panic!("Not Integer")
-    }
+    true
 }
 
+fn include_string(tokens: &mut VecDeque<String>) -> bool {
+    for i in tokens {
+        if let Err(tmp) = i.parse::<f64>() {
+            return true;
+        }
+    }
+
+    false
+}
 
 // Basically calculate as Integer
 // But when there is any float in tokens, calculate as float
-pub fn add(tokens: &mut VecDeque<String>) -> String {
-    let mut result_int = 0;
-    let mut result_float = 0.0;
-    let mut flag_int = true;
-    while tokens.len() > 0 {
-        let token = tokens.pop_front().unwrap();
-
-        
-        if let Ok(value_int) = token.parse::<i32>() {
-            result_int += value_int;
-        }
-        
-        if let Ok(value_float) = token.parse::<f64>() {
-            result_float += value_float;
-        }
-    }
-    if result_float == 0.0 {
-        return result_int.to_string();
+pub fn add(args: &mut VecDeque<String>) -> String {
+    if include_string(args) {
+        panic!("List include not number");
     }
 
-    return 
+    // calculate as float
+    if include_float(args) {
+        let result_float: f64 = args
+            .iter()
+            .map(|k| k.parse::<f64>().unwrap())
+            .fold(0.0, |sum, i| sum + i);
+        return result_float.to_string();
+    }
+
+    // otherwise
+    let result_int: i32 = args
+        .iter()
+        .map(|k| k.parse::<i32>().unwrap())
+        .fold(0, |sum, i| sum + i);
+    return result_int.to_string();
 }
