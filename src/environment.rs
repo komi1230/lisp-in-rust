@@ -41,5 +41,36 @@ pub fn add(args: &mut VecDeque<String>) -> String {
         .iter()
         .map(|k| k.parse::<i32>().unwrap())
         .fold(0, |sum, i| sum + i);
-    return result_int.to_string();
+    result_int.to_string()
+}
+
+pub fn sub(args: &mut VecDeque<String>) -> String {
+    if include_string(args) {
+        panic!("List include not number");
+    }
+
+    // calculate as float
+    if include_float(args) {
+        let head_float: f64 = args.pop_front().unwrap().parse::<f64>().unwrap();
+        if args.len() == 0 {
+            return head_float.to_string();
+        }
+
+        let result_float: f64 = args
+            .iter()
+            .map(|k| k.parse::<f64>().unwrap())
+            .fold(head_float, |sum, i| sum + i);
+        return result_float.to_string();
+    }
+
+    let head_int: i32 = args.pop_front().unwrap().parse::<i32>().unwrap();
+    if args.len() == 0 {
+        return head_int.to_string();
+    }
+
+    let result_int: i32 = args
+        .iter()
+        .map(|k| k.parse::<i32>().unwrap())
+        .fold(head_int, |sum, i| sum + i);
+    result_int.to_string()
 }
