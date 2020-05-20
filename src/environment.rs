@@ -127,15 +127,35 @@ pub fn div(args: &mut VecDeque<String>) -> String {
 }
 
 pub fn car(args: &mut VecDeque<String>) -> VecDeque<String> {
-    let token = args.pop_front().unwrap();
+    let  _ = args.pop_front();
+    let mut token = args.pop_front().unwrap();
     let mut list: VecDeque<String> = VecDeque::new();
 
     if token == "(" {
-        while args.len() > 0 && token != ")" {
-            list.push_back(args.pop_front().unwrap());
+        list.push_back("(".to_string());
+        while args.len() > 0 && args[0] != ")" {
+            token = args.pop_front().unwrap();
+            list.push_back(token);
         }
+        token = args.pop_front().unwrap();
+        list.push_back(token);
         return list;
     }
-    list.push_back(args.pop_front().unwrap());
+    list.push_back(token);
     list
+}
+
+pub fn cdr(args: &mut VecDeque<String>) -> &mut VecDeque<String> {
+    let  _ = args.pop_front();
+    let mut token = args.pop_front().unwrap();
+
+    if token == "(" {
+        while args.len() > 0 && token != ")" {
+            token = args.pop_front().unwrap();
+        }
+        args.push_front("(".to_string());
+        return args;
+    }
+    args.push_front("(".to_string());
+    args
 }
