@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 fn include_float(tokens: &mut VecDeque<String>) -> bool {
     for i in tokens {
-        if let Ok(tmp) = i.parse::<i32>() {
+        if let Ok(_tmp) = i.parse::<i32>() {
             return false;
         }
     }
@@ -11,7 +11,7 @@ fn include_float(tokens: &mut VecDeque<String>) -> bool {
 
 fn include_string(tokens: &mut VecDeque<String>) -> bool {
     for i in tokens {
-        if let Err(tmp) = i.parse::<f64>() {
+        if let Err(_tmp) = i.parse::<f64>() {
             return true;
         }
     }
@@ -124,4 +124,18 @@ pub fn div(args: &mut VecDeque<String>) -> String {
         .map(|k| k.parse::<i32>().unwrap())
         .fold(head_int, |s, i| s / i);
     result_int.to_string()
+}
+
+pub fn car(args: &mut VecDeque<String>) -> VecDeque<String> {
+    let token = args.pop_front().unwrap();
+    let mut list: VecDeque<String> = VecDeque::new();
+
+    if token == "(" {
+        while args.len() > 0 && token != ")" {
+            list.push_back(args.pop_front().unwrap());
+        }
+        return list;
+    }
+    list.push_back(args.pop_front().unwrap());
+    list
 }
