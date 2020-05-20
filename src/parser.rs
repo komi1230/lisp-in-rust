@@ -13,3 +13,16 @@ pub fn tokenize(s: &str) -> VecDeque<String> {
 
     tokens
 }
+
+pub fn print(tokens: &mut VecDeque<String>) -> String {
+    let mut s = "".to_string();
+    for i in 0..(tokens.len()-1) {
+        if tokens[i] == "(" || tokens[i+1] == ")" {
+            s = s + &tokens[i];
+        } else {
+            s = s + &tokens[i] + " ";
+        }
+    }
+    s = s + &tokens[tokens.len()-1];
+    s
+}
