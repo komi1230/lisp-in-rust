@@ -6,7 +6,6 @@ fn include_float(tokens: &mut VecDeque<String>) -> bool {
             return false;
         }
     }
-
     true
 }
 
@@ -16,7 +15,6 @@ fn include_string(tokens: &mut VecDeque<String>) -> bool {
             return true;
         }
     }
-
     false
 }
 
