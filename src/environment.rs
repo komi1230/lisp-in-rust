@@ -83,7 +83,7 @@ pub fn mul(args: &mut VecDeque<String>) -> String {
         let result_float: f64 = args
             .iter()
             .map(|k| k.parse::<f64>().unwrap())
-            .fold(0.0, |s, i| s * i);
+            .fold(1.0, |s, i| s * i);
         return result_float.to_string();
     }
 
@@ -91,7 +91,7 @@ pub fn mul(args: &mut VecDeque<String>) -> String {
     let result_int: i32 = args
         .iter()
         .map(|k| k.parse::<i32>().unwrap())
-        .fold(0, |s, i| s * i);
+        .fold(1, |s, i| s * i);
     result_int.to_string()
 }
 
@@ -145,6 +145,7 @@ pub fn car(args: &mut VecDeque<String>) -> VecDeque<String> {
     list
 }
 
+// Accept args like (cdr ("hoge" "foo"))
 pub fn cdr(args: &mut VecDeque<String>) -> &mut VecDeque<String> {
     let  _ = args.pop_front();
     let mut token = args.pop_front().unwrap();
