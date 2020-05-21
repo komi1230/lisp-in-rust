@@ -160,3 +160,30 @@ pub fn cdr(args: &mut VecDeque<String>) -> &mut VecDeque<String> {
     args.push_front("(".to_string());
     args
 }
+
+pub fn cons(args: &mut VecDeque<String>) -> VecDeque<String> {
+    let mut list: VecDeque<String> = VecDeque::new();
+    list.push_front("(".to_string());
+    let mut token = args.pop_front().unwrap();
+    list.push_back(token);
+
+    if token == "(" {
+        while args.len() > 0 && args[0] != ")" {
+            token = args.pop_front().unwrap();
+            list.push_back(token);
+        }
+    }
+
+    token = args.pop_front().unwrap();
+    if token = "(" {
+        list.push_back(token);
+        while args.len() > 0 && args[0] != ")" {
+            token = args.pop_front().unwrap();
+            list.push_back(token);
+        }
+    } else {
+        list.push_back(token)
+    }
+    list.push_back(")".to_string());
+    list
+}
