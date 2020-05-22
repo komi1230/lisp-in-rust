@@ -18,6 +18,7 @@ fn include_string(tokens: &mut VecDeque<String>) -> bool {
     false
 }
 
+
 // Basically calculate as Integer
 // But when there is any float in tokens, calculate as float
 pub fn add(args: &mut VecDeque<String>) -> String {
@@ -164,25 +165,22 @@ pub fn cdr(args: &mut VecDeque<String>) -> &mut VecDeque<String> {
 pub fn cons(args: &mut VecDeque<String>) -> VecDeque<String> {
     let mut list: VecDeque<String> = VecDeque::new();
     list.push_front("(".to_string());
-    let mut token = args.pop_front().unwrap();
-    list.push_back(token);
 
-    if token == "(" {
+    if args[0] == "(" {
         while args.len() > 0 && args[0] != ")" {
-            token = args.pop_front().unwrap();
-            list.push_back(token);
-        }
-    }
-
-    token = args.pop_front().unwrap();
-    if token = "(" {
-        list.push_back(token);
-        while args.len() > 0 && args[0] != ")" {
-            token = args.pop_front().unwrap();
-            list.push_back(token);
+            list.push_back(args.pop_front().unwrap());
         }
     } else {
-        list.push_back(token)
+        list.push_back(args.pop_front().unwrap());
+    }
+
+    if args[0] == "(".to_string() {
+        list.push_back(args.pop_front().unwrap());
+        while args.len() > 0 && args[0] != ")" {
+            list.push_back(args.pop_front().unwrap());
+        }
+    } else {
+        list.push_back(args.pop_front().unwrap())
     }
     list.push_back(")".to_string());
     list
